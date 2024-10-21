@@ -4,7 +4,6 @@ import sys
 import requests as req
 import json
 import logging
-import ipaddress
 
 def check_ip_address(api_key, ip_address):
     """
@@ -24,19 +23,6 @@ def check_ip_address(api_key, ip_address):
         print('Invalid API key provided.')
         return False
 
-    # Validate IP address
-    if not ip_address or not isinstance(ip_address, str):
-        logging.error('Invalid IP address provided.')
-        print('Invalid IP address provided.')
-        return False
-
-    # Check if IP address is valid
-    try:
-        ipaddress.ip_address(ip_address)
-    except ValueError:
-        logging.error(f'Invalid IP address format: {ip_address}')
-        print(f'Invalid IP address format: {ip_address}')
-        return False
 
     headers = {
         'accept': 'application/json',

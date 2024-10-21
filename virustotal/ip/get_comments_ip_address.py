@@ -1,43 +1,35 @@
 import os
 import sys
-
 import requests as req
 import json
 import logging
-import ipaddress
 
-def get_comments_ip_address(api_key, ip_address, limit=10):
+def get_comments_ip_address(api_key: str, ip_address: str, limit: int = 10) -> bool:
     """
     Retrieves comments for an IP address from VirusTotal and saves the result to a JSON file.
 
     Parameters:
         api_key (str): Your VirusTotal API key.
         ip_address (str): The IP address to retrieve comments for.
-        limit (int): Number of comments to retrieve (default is 10).
+        limit (int): Number of comments to retrieve (default is 10, max is 100).
 
     Returns:
         bool: True if the operation is successful, False otherwise.
     """
 
     # Validate API key
-    if not api_key or not isinstance(api_key, str):
+    if not isinstance(api_key, str) or not api_key.strip():
         logging.error('Invalid API key provided.')
         print('Invalid API key provided.')
         return False
 
-    # Validate IP address
-    if not ip_address or not isinstance(ip_address, str):
-        logging.error('Invalid IP address provided.')
-        print('Invalid IP address provided.')
+
+    # Validate limit
+    if not isinstance(limit, int) or limit < 1 or limit > 100:
+        logging.error('Limit must be an integer between 1 and 100.')
+        print('Limit must be an integer between 1 and 100.')
         return False
 
-    # Check if IP address is valid
-    try:
-        ipaddress.ip_address(ip_address)
-    except ValueError:
-        logging.error(f'Invalid IP address format: {ip_address}')
-        print(f'Invalid IP address format: {ip_address}')
-        return False
 
     headers = {
         'accept': 'application/json',
@@ -75,6 +67,7 @@ def get_comments_ip_address(api_key, ip_address, limit=10):
 
         logging.info(f'Comments for IP address {ip_address} saved to {file_path}')
         print(f'Comments for IP address {ip_address} saved to {file_path}')
+
         sys.exit(1)
         # return True
 
@@ -98,6 +91,9 @@ def get_comments_ip_address(api_key, ip_address, limit=10):
     except json.JSONDecodeError as json_err:
         logging.error(f'JSON decode error: {json_err}')
         print(f'Error decoding JSON response: {json_err}')
+    except IOError as io_err:
+        logging.error(f'File I/O error: {io_err}')
+        print(f'File I/O error: {io_err}')
     except Exception as err:
         logging.error(f'An unexpected error occurred: {err}')
         print(f'An unexpected error occurred: {err}')

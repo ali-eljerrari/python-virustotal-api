@@ -65,23 +65,27 @@ def main():
         '2': 'Request an IP address rescan (re-analyze)',
         '3': 'Get comments on an IP address',
         '4': 'Add a comment to an IP address',
-        '9': 'Analyze a file by hash',
-        '10': 'Submit a file for analysis',
-        '11': 'Check analysis result by ID',
+        '5': 'Get objects related to an IP address',
+        '6': 'Get object descriptors related to an IP address',
+        '7': 'Get votes on an IP address',
+        '8': 'Add a vote to an IP address',
+        '9': 'Get a file report',
+        '10': 'Upload a file',
+        '11': 'Get a URL / file analysis',
         '0': 'Exit'
     }
 
     while True:
         print('\nPlease select an option:')
         print('\nFor analyzing IP addresses:')
-        for option in ['1', '2', '3', '4']:
+        for option in ['1', '2', '3', '4', '5', '6', '7', '8']:
             print(f'{option}. {menu_options[option]}')
         print('\nFor analyzing files:')
         for option in ['9', '10', '11']:
             print(f'{option}. {menu_options[option]}')
-        print('0. Exit')
+        print('\n0. Exit')
 
-        choice = input('Enter your choice: ').strip()
+        choice = input('\nEnter your choice: ').strip()
 
         try:
             if choice == '1':

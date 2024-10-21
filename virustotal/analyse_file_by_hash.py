@@ -62,6 +62,7 @@ def analyse_file_by_hash(api_key, hash_code):
             json.dump(json_response, file, indent=4, ensure_ascii=False)
         logging.info(f"Analysis for {hash_code} saved to {file_path}")
         print(f"Analysis for {hash_code} saved to {file_path}")
+        sys.exit(1)
 
     except req.exceptions.HTTPError as http_err:
         status_code = http_err.response.status_code

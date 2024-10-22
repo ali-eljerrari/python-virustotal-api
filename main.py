@@ -10,7 +10,24 @@ from virustotal.files.submit_file_for_analysis import submit_file_for_analysis
 from virustotal.ip.check_ip_address import check_ip_address
 from virustotal.ip.add_comment_to_ip_address import add_comment_to_ip_address
 from virustotal.ip.get_comments_ip_address import get_comments_ip_address
+from virustotal.ip.get_objects_related_to_an_IP_address import get_objects_related_to_an_ip_address
 from virustotal.ip.rescan_ip_address import rescan_ip_address
+
+# Validate relationship
+allowed_relationships = {
+    'comments',
+    'communicating_files',
+    'downloaded_files',
+    'graphs',
+    'historical_ssl_certificates',
+    'historical_whois',
+    'related_comments',
+    'related_references',
+    'related_threat_actors',
+    'referrer_files',
+    'resolutions',
+    'urls'
+}
 
 
 def get_valid_ip(prompt='Please provide an IP address: '):
@@ -103,11 +120,32 @@ def main():
 
             elif choice == '4':
                 ip_address = get_valid_ip()
+
                 comment = input('Insert your comment: ').strip()
+
                 if not comment:
                     print('Comment cannot be empty!')
                     continue
+
                 add_comment_to_ip_address(api_key, ip_address, comment)
+
+            elif choice == '5':
+                ip_address = get_valid_ip()
+
+                print('\nAllowed Relationships:\n')
+                for relationship in list(allowed_relationships): print(f'-{relationship}')
+
+                relationship = input('\nInsert one relationship from above: ').strip()
+
+                if relationship not in allowed_relationships:
+                    logging.error(f'Invalid relationship type: {relationship}')
+                    print(
+                        f'Invalid relationship type: {relationship}. Allowed types are: {", ".join(allowed_relationships)}')
+                    continue
+
+                limit = get_valid_int('Number of relationship to get (1-100): ', 1, 100)
+
+                get_objects_related_to_an_ip_address(api_key, ip_address, relationship, limit)
 
             elif choice == '9':
                 hash_code = input('Please provide the hash of the file: ').strip()
